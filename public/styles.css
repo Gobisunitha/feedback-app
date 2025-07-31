@@ -1,0 +1,57 @@
+/* styles.css */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #ffd9b3, #ff9999);
+  background-image: url('background-leaves.png'); /* Optional decorative background */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #333;
+}
+
+.container {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 40px;
+}
+
+.form-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 30px;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+input, textarea {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 2px solid #ffa07a;
+  border-radius: 8px;
+  font-size: 16px;
+  resize: none;
+}
+
+button {
+  background-color: #ff704d;
+  color: white;
+  padding: 15px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #e65c33;
+}
