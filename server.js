@@ -6,24 +6,24 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// PostgreSQL connection using Render-hosted DB (recommended to store in env)
+// PostgreSQL pool setup – replace if needed
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://feedback_db_laym_user:jVKxBAneNSkyRuDaAxkUCzhgotBI0Gx7@dpg-d1sildvgi27c739f6ql0-a.singapore-postgres.render.com/feedback_db_laym',
+  connectionString: 'postgresql://feedback_db_laym_user:jVKxBAneNSkyRuDaAxkUCzhgotBI0Gx7@dpg-d1sildvgi27c739f6ql0-a.singapore-postgres.render.com/feedback_db_laym',
   ssl: {
     rejectUnauthorized: false
   }
 });
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public'))); // Serve HTML, CSS, JS
 
-// Test route to verify server is alive
+// Serve form page (GET /)
 app.get('/', (req, res) => {
-  res.send('Feedback app backend is running');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// POST route to insert feedback
+// Handle form submission (POST /submit)
 app.post('/submit', async (req, res) => {
   const { name, feedback } = req.body;
 
@@ -33,18 +33,29 @@ app.post('/submit', async (req, res) => {
 
   try {
     await pool.query(
-      'INSERT INTO feedback (name, feedback) VALUES ($1, $2)',
+      'INSERT INTO feedback (name, message) VALUES ($1, $2)',
       [name, feedback]
     );
-    res.send('Feedback submitted!');
+    res.redirect('/success'); // Redirect to prevent resubmission
   } catch (err) {
     console.error('Error inserting feedback:', err);
     res.status(500).send('Error saving feedback');
   }
 });
 
+// Success page (GET /success)
+app.get('/success', (req, res) => {
+  res.send(`
+    <script>
+      alert('Feedback submitted successfully!');
+      window.location.href = '/'; // Go back to the form page
+    </script>
+  `);
+});
+
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
+
 
