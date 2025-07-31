@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// PostgreSQL pool setup – replace if needed
+// PostgreSQL connection
 const pool = new Pool({
   connectionString: 'postgresql://feedback_db_laym_user:jVKxBAneNSkyRuDaAxkUCzhgotBI0Gx7@dpg-d1sildvgi27c739f6ql0-a.singapore-postgres.render.com/feedback_db_laym',
   ssl: {
@@ -16,19 +16,19 @@ const pool = new Pool({
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public'))); // Serve HTML, CSS, JS
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve form page (GET /)
+// Serve the form page
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Handle form submission (POST /submit)
+// Handle form submission
 app.post('/submit', async (req, res) => {
   const { name, feedback } = req.body;
 
   if (!name || !feedback) {
-    return res.status(400).send('Please fill out all fields');
+    return res.status(400).send('Please fill out all fields.');
   }
 
   try {
@@ -36,26 +36,14 @@ app.post('/submit', async (req, res) => {
       'INSERT INTO feedback (name, message) VALUES ($1, $2)',
       [name, feedback]
     );
-    res.redirect('/success'); // Redirect to prevent resubmission
+    // Redirect to success page to avoid resubmission
+    res.redirect('/success');
   } catch (err) {
     console.error('Error inserting feedback:', err);
-    res.status(500).send('Error saving feedback');
+    res.status(500).send('Something went wrong while saving your feedback.');
   }
 });
 
-// Success page (GET /success)
-app.get('/success', (req, res) => {
-  res.send(`
-    <script>
-      alert('Feedback submitted successfully!');
-      window.location.href = '/'; // Go back to the form page
-    </script>
-  `);
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// Success route (shows
 
 

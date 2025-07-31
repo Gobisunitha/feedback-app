@@ -5,6 +5,47 @@
   <title>Feedback Form</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    /* Optional fallback styles if styles.css fails */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .form-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -19,24 +60,35 @@
   </div>
 
   <script>
-    document.getElementById('feedbackForm').onsubmit = async function (e) {
+    document.getElementById('feedbackForm').addEventListener('submit', async function (e) {
       e.preventDefault();
-      const name = e.target.name.value;
-      const feedback = e.target.feedback.value;
 
-      const response = await fetch('/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ name, feedback })
-      });
-
-      if (response.ok) {
-        alert('Feedback submitted!');
-        e.target.reset();
-      } else {
-        alert('Error submitting feedback');
+      const formData = new FormData(e.target);
+      const data = new URLSearchParams();
+      for (const pair of formData) {
+        data.append(pair[0], pair[1]);
       }
-    };
+
+      try {
+        const response = await fetch('/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: data
+        });
+
+        if (response.ok) {
+          alert('✅ Feedback submitted successfully!');
+          e.target.reset();
+        } else {
+          const errText = await response.text();
+          alert('❌ Error submitting feedback:\n' + errText);
+        }
+      } catch (error) {
+        alert('⚠️ Network or server error:\n' + error.message);
+      }
+    });
   </script>
 </body>
 </html>
