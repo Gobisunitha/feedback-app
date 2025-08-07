@@ -26,18 +26,17 @@ app.get("/", (req, res) => {
 });
 
 // Feedback submission handler
-app.post("/submit-feedback", async (req, res) => {
-  const { name, email, rating, message } = req.body;
-
+app.post('/submit', async (req, res) => {
+  const { name, email, message } = req.body;
   try {
     await pool.query(
-      "INSERT INTO feedback (name, email, rating, message) VALUES ($1, $2, $3, $4)",
-      [name, email, rating, message]
+      'INSERT INTO feedback (name, email, message) VALUES ($1, $2, $3)',
+      [name, email, message]
     );
-    res.redirect("/"); // Go back to the form
-  } catch (err) {
-    console.error("Error saving feedback:", err);
-    res.status(500).send("Failed to submit feedback");
+    res.status(200).send('Feedback submitted successfully');
+  } catch (error) {
+    console.error('Error inserting into database:', error);
+    res.status(500).send('Server error. Please try again later.');
   }
 });
 
