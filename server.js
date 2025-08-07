@@ -16,16 +16,16 @@ const pool = new Pool({
 });
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true })); // For HTML form submissions
-app.use(bodyParser.json()); // For JSON submissions (optional but useful)
-app.use(express.static(path.join(__dirname, "public"))); // Serve frontend files
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "public")));
 
-// Serve index.html on root path
+// Serve frontend
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Feedback submission handler
+// Handle form submission
 app.post('/submit', async (req, res) => {
   const { name, email, message } = req.body;
   try {
@@ -39,11 +39,6 @@ app.post('/submit', async (req, res) => {
     res.status(500).send('Server error. Please try again later.');
   }
 });
-fetch('/submit', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ name, email, message })
-})
 
 // Start server
 app.listen(PORT, () => {
