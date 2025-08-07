@@ -39,6 +39,11 @@ app.post('/submit', async (req, res) => {
     res.status(500).send('Server error. Please try again later.');
   }
 });
+fetch('/submit', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name, email, message })
+})
 
 // Start server
 app.listen(PORT, () => {
