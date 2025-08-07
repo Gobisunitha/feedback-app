@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feedback Form</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="card">
+    <h1>We Value Your Feedback!</h1>
+    <form id="feedbackForm">
+      <label for="name">👤 Your Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required />
+
+      <label for="email">📧 Your Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+      <label for="feedback">💬 Your Feedback</label>
+      <textarea id="feedback" name="feedback" rows="4" placeholder="Share your thoughts..." required></textarea>
+
+      <button type="submit">🚀 Submit Feedback</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("feedbackForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = {
+        name: form.name.value,
+        email: form.email.value,
+        feedback: form.feedback.value
+      };
+
+      try {
+        const res = await fetch("/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          alert("🎉 Feedback submitted successfully!");
+          form.reset();
+        } else {
+          alert("⚠️ Failed to submit feedback.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("💥 Server error. Please try again later.");
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+<<<<<<< HEAD
+  "name": "feedback-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+=======
+  "name": "paas_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+>>>>>>> e26b9ab8d51e87c1f145c90909aa9818c03b5c1c
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+<<<<<<< HEAD
+    "body-parser": "^2.2.0",
+=======
+>>>>>>> e26b9ab8d51e87c1f145c90909aa9818c03b5c1c
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  }
+}
